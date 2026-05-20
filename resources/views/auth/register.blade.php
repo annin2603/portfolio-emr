@@ -1,5 +1,8 @@
 <x-guest-layout>
     <form method="POST" action="{{ route('register') }}">
+        @if ($errors->any())
+            <div class="text-red-600 font-bold mb-4">【エラー原因】{{ implode(', ', $errors->all()) }}</div>
+        @endif
         @csrf
 
         <!-- Name -->
@@ -9,12 +12,21 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
-        <!-- Email Address -->
+        {{-- <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div> --}}
+
+
+        <!--【ここから追加】職員番号の入力欄を新しく増築します！ -->
+        <div>
+            <x-input-label for="login_id" value="職員ID" />
+            <x-text-input id="login_id" class="block mt-1 w-full" type="text" name="login_id" :value="old('login_id')" required autofocus  />
+            <x-input-error :messages="$errors->get('login_id')" class="mt-2" />
         </div>
+        <!--【ここまで追加】 -->
 
         <!-- Password -->
         <div class="mt-4">
