@@ -17,12 +17,14 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
 
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-gray-700 flex items-center">
-                        👥 入院患者一覧
-                    </h3>
-                    <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg shadow-sm text-sm transition-colors flex items-center">
-                        新規患者登録
-                    </a>
+                    <div class="flex">
+                        <h3 class="text-lg font-bold text-gray-700 flex items-center">
+                            👥 入院患者一覧
+                        </h3>
+                        <a href="{{ route('patients.create')}}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 mx-10 rounded-lg shadow-sm text-sm transition-colors flex items-center">
+                            新規患者登録
+                        </a>
+                    </div>
                     <span class="text-sm text-gray-500">現在 {{ $patients->count() }} 名が入院中</span>
                 </div>
 
