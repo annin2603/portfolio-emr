@@ -27,6 +27,12 @@
                     </div>
                     <span class="text-sm text-gray-500">現在 {{ $patients->count() }} 名が入院中</span>
                 </div>
+                <!-- セッション成功時のメッセージ表示 -->
+                @if(session('success'))
+                    <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
                 <!-- 📊 画面中～下部：患者一覧をテーブルで表示 -->
                 <div class="overflow-x-auto border border-gray-200 rounded-lg">
@@ -49,8 +55,8 @@
                                     <td class="px-4 py-3 font-bold text-gray-900">{{ $patient->room_number }}号室 - {{ $patient->bed_number }}</td>
                                     <td class="px-4 py-3 font-mono text-gray-600">{{ $patient->patient_id }}</td>
                                     <td class="px-4 py-3">
-                                        <div class="font-bold text-gray-900">{{ $patient->name }}</div>
-                                        <div class="text-xs text-gray-400">{{ $patient->kana }}</div>
+                                        <div title="{{ $patient->name }}" class="font-bold text-gray-900 truncate max-w-[150px]">{{ $patient->name }}</div>
+                                        <div title="{{ $patient->kana }}" class="text-xs text-gray-400 truncate max-w-[150px]">{{ $patient->kana }}</div>
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <span class="px-2 py-1 rounded-full text-xs font-bold {{ $patient->gender === '男性' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700' }}">

@@ -12,8 +12,8 @@ class DashboardController extends Controller
     {
         //現在ログインしている医療スタッフの情報を取得
         $staff = Auth::user();
-        //データベース（patientsテーブル）から患者一覧を全員分取得
-        $patients = Patient::all();
+        //データベース（patientsテーブル）から患者一覧を取得して病室順に並べる
+        $patients = Patient::orderBy('room_number')-> orderBy('bed_number')-> get();
         //２つのデータ（スタッフ、患者）をセットにして画面（dashboard）に送る
         return view('dashboard', compact('staff', 'patients'));
     }
@@ -30,21 +30,21 @@ class DashboardController extends Controller
     public function store(Request $request)
     {
         //看護師が入力した内容のチェック（バリデーション）
-        $validateData = $request->validate([
-            'room_number'  => 'required|integer',
+        $validatedData = $request->validate([
+            'room_number'  => 'required|integer|min:1',
             'bed_number'   => 'required|string',
             'patient_id'   => 'required|string|unique:patients,patient_id',
-            'name'         => 'required|string',
-            'kana'         => 'required|string',
+            'name'         => 'required|string|max:255',
+            'kana'         => 'required|string|max:255',
             'gender'       => 'required|string',
             'birthday'     => 'required|date',
-            'blood_type'   => 'nullable|string',
+            'blood_type'   => 'required|string',
             'allergy'      => 'nullable|string',
-            'memo'         => 'nullable|string',
+            'memo'         => 'nullable|string|max:1000',
         ]);
 
         //チェックの結果OKの場合データベース（Patientモデル）に新しいデータを保存
-        Patient::create($validateData);
+        Patient::create($validatedData);
 
         //保存ができたらメッセージ付きでダッシュボード画面に戻る
         return redirect()->route('dashboard')->with('success', '新規患者を登録しました');
