@@ -22,7 +22,7 @@
                             👥 入院患者一覧
                         </h3>
                         <a href="{{ route('patients.create')}}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 mx-10 rounded-lg shadow-sm text-sm transition-colors flex items-center">
-                            新規患者登録
+                            入院患者登録
                         </a>
                     </div>
                     <span class="text-sm text-gray-500">現在 {{ $patients->count() }} 名が入院中</span>
@@ -47,25 +47,34 @@
                                 <th class="px-4 py-3 text-left">血液型</th>
                                 <th class="px-4 py-3 text-left">アレルギー</th>
                                 <th class="px-4 py-3 text-left">備考・メモ</th>
+                                <th class="px-4 py-3 text-left"></th> <!-- 編集 -->
+                                <th class="px-4 py-3 text-left"></th> <!-- 退院 -->
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @forelse($patients as $patient)
                                 <tr class="hover:bg-gray-50 transition-colors">
+                                    <!-- 1. 病室 --><!-- 2. ベッド番号 -->
                                     <td class="px-4 py-3 font-bold text-gray-900">{{ $patient->room_number }}号室 - {{ $patient->bed_number }}</td>
+                                    <!-- 3. 患者ID -->
                                     <td class="px-4 py-3 font-mono text-gray-600">{{ $patient->patient_id }}</td>
+                                    <!-- 4. 氏名 --><!-- 5. フリガナ -->
                                     <td class="px-4 py-3">
                                         <div title="{{ $patient->name }}" class="font-bold text-gray-900 truncate max-w-[150px]">{{ $patient->name }}</div>
                                         <div title="{{ $patient->kana }}" class="text-xs text-gray-400 truncate max-w-[150px]">{{ $patient->kana }}</div>
                                     </td>
-                                    <td class="px-4 py-3 text-center">
+                                     <!-- 6. 性別 -->
+                                    <td class="px-4 py-3 text-center whitespace-nowrap">
                                         <span class="px-2 py-1 rounded-full text-xs font-bold {{ $patient->gender === '男性' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700' }}">
                                             {{ $patient->gender }}
                                         </span>
                                     </td>
-                                    <td class="px-4 py-3 text-center text-gray-600">{{ $patient->birthday }}</td>
-                                    <td class="px-4 py-3 text-gray-700 font-mono">{{ $patient->blood_type ?? '未検' }}</td>
-                                    <td class="px-4 py-3">
+                                     <!-- 7. 生年月日 -->
+                                    <td class="px-4 py-3 text-center text-gray-600 whitespace-nowrap">{{ $patient->birthday }}</td>
+                                    <!-- 8. 血液型 -->
+                                    <td class="px-4 py-3 text-gray-700 font-mono whitespace-nowrap">{{ $patient->blood_type ?? '未検' }}</td>
+                                    <!-- 9. アレルギー -->
+                                    <td class="px-4 py-3 max-w-[150px]">
                                         @if($patient->allergy)
                                             <span class="bg-red-50 text-red-700 border border-red-200 px-2 py-0.5 rounded text-xs font-bold">
                                                 ⚠️ {{ $patient->allergy }}
@@ -74,11 +83,26 @@
                                             <span class="text-gray-400 text-xs">なし</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-3 text-gray-500 max-w-xs truncate">{{ $patient->memo ?? '-' }}</td>
+                                    <!-- 10. 備考（既往歴や申し送り事項） -->
+                                    <td title="{{ $patient->memo }}" class="px-4 py-3 text-gray-500 max-w-40 truncate">{{ $patient->memo ?? '-' }}</td>
+                                    <!-- 11. 編集ボタン -->
+                                    <td class="px-3 py-3 whitespace-nowrap text-sm font-medium ">
+                                        <a href="{{ route('patients.edit', $patient) }}" class="text-green-600 hover:text-green-900 bg-green-100 px-3 py-1 rounded-md transition-colors">編集</a>
+                                    </td>
+                                    <!-- 11. 退院ボタン -->
+                                    <td class="px-3 py-3 whitespace-nowrap text-sm font-medium ">
+                                        <div class="flex items-center space-x-2">
+                                            <form action="{{ route('patients.destroy', $patient) }}" method="POST" onsubmit="return confirm('本当に退院（削除）でよろしいですか？');" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-yellow-600 hover:text-yellow-900 bg-yellow-100 px-3 py-1 rounded-md transition-colors">退院</button>
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="px-4 py-8 text-center text-gray-400 bg-gray-50">
+                                    <td colspan="10" class="px-4 py-8 text-center text-gray-400 bg-gray-50">
                                         📭 現在、登録されている患者データがありません。<br>
                                         <span class="text-xs text-gray-400">(データベースにデータを入れるとここに表示されます！)</span>
                                     </td>

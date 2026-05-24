@@ -6,6 +6,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// ==============================================================================================
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -18,10 +25,12 @@ Route::get('/patients/create', [DashboardController::class, 'create'])->middlewa
 //登録画面で登録ボタンを押したときにデータを保存するための道をつくる(POSTリクエスト)
 Route::post('/patients', [DashboardController::class, 'store'])->middleware(['auth'])->name('patients.store');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+//編集・更新の道を作る
+Route::get('/patients/{patient}/edit', [DashboardController::class, 'edit'])->middleware(['auth'])->name('patients.edit');
+Route::put('/patients/{patient}', [DashboardController::class, 'update'])->middleware(['auth'])->name('patients.update');
+
+//退院（削除）の道を作る
+Route::delete('/patients/{patient}', [DashboardController::class, 'destroy'])->name('patients.destroy');
+
 
 require __DIR__.'/auth.php';
