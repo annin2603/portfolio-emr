@@ -47,13 +47,11 @@
                                 <th class="px-4 py-3 text-left">血液型</th>
                                 <th class="px-4 py-3 text-left">アレルギー</th>
                                 <th class="px-4 py-3 text-left">備考・メモ</th>
-                                <th class="px-4 py-3 text-left"></th> <!-- 編集 -->
-                                <th class="px-4 py-3 text-left"></th> <!-- 退院 -->
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @forelse($patients as $patient)
-                                <tr class="hover:bg-gray-50 transition-colors">
+                                <tr onclick="location.href='{{ route('patients.show', $patient) }}'" class="hover:bg-gray-50 transition-colors">
                                     <!-- 1. 病室 --><!-- 2. ベッド番号 -->
                                     <td class="px-4 py-3 font-bold text-gray-900">{{ $patient->room_number }}号室 - {{ $patient->bed_number }}</td>
                                     <!-- 3. 患者ID -->
@@ -85,20 +83,6 @@
                                     </td>
                                     <!-- 10. 備考（既往歴や申し送り事項） -->
                                     <td title="{{ $patient->memo }}" class="px-4 py-3 text-gray-500 max-w-40 truncate">{{ $patient->memo ?? '-' }}</td>
-                                    <!-- 11. 編集ボタン -->
-                                    <td class="px-3 py-3 whitespace-nowrap text-sm font-medium ">
-                                        <a href="{{ route('patients.edit', $patient) }}" class="text-green-600 hover:text-green-900 bg-green-100 px-3 py-1 rounded-md transition-colors">編集</a>
-                                    </td>
-                                    <!-- 11. 退院ボタン -->
-                                    <td class="px-3 py-3 whitespace-nowrap text-sm font-medium ">
-                                        <div class="flex items-center space-x-2">
-                                            <form action="{{ route('patients.destroy', $patient) }}" method="POST" onsubmit="return confirm('本当に退院（削除）でよろしいですか？');" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-yellow-600 hover:text-yellow-900 bg-yellow-100 px-3 py-1 rounded-md transition-colors">退院</button>
-                                            </form>
-                                        </div>
-                                    </td>
                                 </tr>
                             @empty
                                 <tr>

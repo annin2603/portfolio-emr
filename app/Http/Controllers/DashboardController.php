@@ -89,4 +89,11 @@ class DashboardController extends Controller
         return redirect()->route('dashboard')->with('success', '患者情報を削除しました');
     }
 
+    // 患者の詳細画面を表示する
+    public function show(Patient $patient) {
+        $staff = Auth::user();
+
+        // 詳細画面のテンプレート開き、患者データと職員データもまとめて持っていく
+        return view('patients.show', compact('patient', 'staff'));
+    }
 }

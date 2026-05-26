@@ -20,16 +20,19 @@ Route::middleware('auth')->group(function () {
 
 use App\Http\Controllers\DashboardController; // ファイルの上のほう（他のuseの並び）に追加
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-//患者の新規登録画面を開くための道を作る（URL：/patients/create）
+//　患者の新規登録画面を開くための道を作る（URL：/patients/create）
 Route::get('/patients/create', [DashboardController::class, 'create'])->middleware(['auth'])->name('patients.create');
-//登録画面で登録ボタンを押したときにデータを保存するための道をつくる(POSTリクエスト)
+//　登録画面で登録ボタンを押したときにデータを保存するための道をつくる(POSTリクエスト)
 Route::post('/patients', [DashboardController::class, 'store'])->middleware(['auth'])->name('patients.store');
 
-//編集・更新の道を作る
+//　編集・更新の道を作る
 Route::get('/patients/{patient}/edit', [DashboardController::class, 'edit'])->middleware(['auth'])->name('patients.edit');
 Route::put('/patients/{patient}', [DashboardController::class, 'update'])->middleware(['auth'])->name('patients.update');
 
-//退院（削除）の道を作る
+//　患者詳細画面用の道を作る
+Route::get('/patients/{patient}', [DashboardController::class, 'show'])->middleware(['auth'])->name('patients.show');
+
+//　退院（削除）の道を作る
 Route::delete('/patients/{patient}', [DashboardController::class, 'destroy'])->name('patients.destroy');
 
 
