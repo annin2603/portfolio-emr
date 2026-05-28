@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Patient extends Model
 {
@@ -19,5 +20,12 @@ class Patient extends Model
         'allergy',
         'memo'
     ];
+
+    // 患者側にバイタルの記録を引っ張てこれるようにする
+    public function vitalSigns(): HasMany {
+
+        // 測定日時が新しい順（降順）に並べて表示する
+        return $this->hasMany(VitalSign::class)->orderBy('measured_at', 'desc');
+    }
 
 }
