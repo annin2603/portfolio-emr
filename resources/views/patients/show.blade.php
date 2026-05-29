@@ -86,7 +86,7 @@
             <div class="bg-white overflow-hidden shadow-sm rounded-lg p-6">
                 <h4 class="text-lg font-bold text-gray-800 mb-4">📈 バイタルサイン記録</h4>
 
-                <form action="{{ route('patients.vitals.store', $patient) }}" method="POST" class="space-y-6">
+                <form action="#" method="POST" class="space-y-6">
                     @csrf
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
