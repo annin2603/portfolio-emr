@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VitalSignController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,7 @@ Route::middleware('auth')->group(function () {
 
 use App\Http\Controllers\DashboardController; // ファイルの上のほう（他のuseの並び）に追加
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
 //　患者の新規登録画面を開くための道を作る（URL：/patients/create）
 Route::get('/patients/create', [DashboardController::class, 'create'])->middleware(['auth'])->name('patients.create');
 //　登録画面で登録ボタンを押したときにデータを保存するための道をつくる(POSTリクエスト)
@@ -34,6 +36,18 @@ Route::get('/patients/{patient}', [DashboardController::class, 'show'])->middlew
 
 //　退院（削除）の道を作る
 Route::delete('/patients/{patient}', [DashboardController::class, 'destroy'])->name('patients.destroy');
+
+// バイタルサイン記録(保存)の道を作る
+Route::post('patients/{patient}/vitals', [VitalSignController::class, 'store'])->name('patients.vitals.store');
+
+// バイタル編集画面を作る
+Route::get('patients/{patient}/vitals/{vital_sign}/edit', [VitalSignController::class, 'edit'])->name('patients.vitals.edit');
+
+// バイタルを更新する（PUTリクエスト）
+Route::put('patients/{patient}/vitals/{vital_sign}', [VitalSignController::class, 'update'])->name('patients.vitals.update');
+
+// バイタルを削除する（DELETEリクエスト）
+Route::delete('patients/{patient}/vitals/{vital_sign}', [VitalSignController::class, 'destroy'])->name('patients.vitals.destroy');
 
 
 require __DIR__.'/auth.php';
