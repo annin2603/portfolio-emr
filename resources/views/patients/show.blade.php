@@ -310,7 +310,7 @@
 
                 <!-- バイタル履歴 -->
                 <div class="mt-8 pt-6 border-t border-gray-100">
-                    <h5 class="text-md font-bold text-gray-700 mb-4">📋 過去のバイタルサイン</h5>
+                    <h5 class="text-lg font-bold text-gray-700 mb-4">📋 過去のバイタルサイン</h5>
 
                     @if($patient->vitalSigns->isEmpty())
                         <p class="text-sm text-gray-500 py-4 text-center bg-gray-50 rounded">バイタルサインの記録はまだありません。</p>

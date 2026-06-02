@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                🏥 スマート電子カルテ
+                🏥 Smart電子カルテ
             </h2>
             <!-- 👤 画面上部：ログイン者の情報を表示 -->
             <div class="text-sm text-gray-600 bg-blue-50 px-4 py-2 rounded-lg border border-blue-100">

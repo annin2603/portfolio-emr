@@ -175,7 +175,7 @@
                         <!-- ボタン -->
                         <div class="flex justify-end space-x-3 pt-6 border-t border-gray-100">
                             <!-- キャンセルを押したら一覧画面に戻るように route() を繋ぐ -->
-                            <a href="{{ route('dashboard') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm transition-colors">
+                            <a href="{{ route('patients.show', $patient) }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm transition-colors">
                                 キャンセル
                             </a>
                             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-md shadow-sm text-sm transition-colors">
