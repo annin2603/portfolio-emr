@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                🏥 電子カルテシステム
+                🏥 スマート電子カルテ
             </h2>
             <!-- 👤 画面上部：ログイン者の情報を表示 -->
             <div class="text-sm text-gray-600 bg-blue-50 px-4 py-2 rounded-lg border border-blue-100">
@@ -44,7 +44,7 @@
                                 <th class="px-4 py-3 text-left">氏名 (フリガナ)</th>
                                 <th class="px-4 py-3 text-center">性別</th>
                                 <th class="px-4 py-3 text-center">生年月日</th>
-                                <th class="px-4 py-3 text-left">血液型</th>
+                                <th class="px-4 py-3 text-left">年齢</th>
                                 <th class="px-4 py-3 text-left">アレルギー</th>
                                 <th class="px-4 py-3 text-left">備考・メモ</th>
                             </tr>
@@ -69,8 +69,8 @@
                                     </td>
                                      <!-- 7. 生年月日 -->
                                     <td class="px-4 py-3 text-center text-gray-600 whitespace-nowrap">{{ $patient->birthday }}</td>
-                                    <!-- 8. 血液型 -->
-                                    <td class="px-4 py-3 text-gray-700 font-mono whitespace-nowrap">{{ $patient->blood_type ?? '未検' }}</td>
+                                    <!-- 8. 年齢 -->
+                                    <td class="px-4 py-3 text-gray-600 whitespace-nowrap">{{ \Carbon\Carbon::parse($patient->birthday)->age }}歳</td>
                                     <!-- 9. アレルギー -->
                                     <td class="px-4 py-3 max-w-[150px]">
                                         @if($patient->allergy)

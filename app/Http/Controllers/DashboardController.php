@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Patient; //Patientモデルを使う宣言
+use App\Models\VitalSign;
 
 class DashboardController extends Controller
 {
@@ -53,8 +54,11 @@ class DashboardController extends Controller
 
     // 2. 患者情報の編集画面の表示する
     public function edit(Patient $patient){
-        $staff = Auth::user(); // ログイン中の職員情報を取得
-        return view('patients.edit', compact('patient'));
+        $staff = Auth::user();
+
+        // ログイン中の職員情報を取得
+        return view('patients.edit', compact('patient', 'staff'));
+
     }
     // 編集画面から送られてきたデータで上書き保存する
     public function update(Request $request, Patient $patient)
@@ -76,8 +80,8 @@ class DashboardController extends Controller
         //検証でOKのデータを既存データに上書き保存
         $patient->update($validatedData);
 
-        //上書き保存ができたらメッセージ付きでダッシュボード画面に戻る
-        return redirect()->route('dashboard')->with('success', '患者情報を更新しました');
+        //上書き保存ができたらメッセージ付きで患者詳細画面に戻る
+        return redirect()->route('patients.show', $patient)->with('success', '患者情報を更新しました');
     }
 
     // 3. 患者でデータの削除（退院）
@@ -93,7 +97,13 @@ class DashboardController extends Controller
     public function show(Patient $patient) {
         $staff = Auth::user();
 
-        // 詳細画面のテンプレート開き、患者データと職員データもまとめて持っていく
-        return view('patients.show', compact('patient', 'staff'));
+        // 患者さんのバイタル履歴を、測定日時の古い順（昇順）で全部取得する
+        $vital_history = VitalSign::where('patient_id', $patient->id)->orderBy('measured_at', 'asc')->get();
+
+
+        // 詳細画面のテンプレート開き、患者データと職員データもまとめてblade持っていく
+        return view('patients.show', compact('patient', 'staff', 'vital_history'));
+
+
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\VitalSign;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class VitalSignController extends Controller
@@ -50,8 +51,12 @@ class VitalSignController extends Controller
     // バイタルサイン編集画面の表示
     public function edit(Patient $patient, VitalSign $vital_sign) {
 
-        // 患者データとバイタルデータを渡して表示
-        return view('patients.edit_vital', compact('patient', 'vital_sign'));
+        $staff = Auth::user();
+
+        return view('patients.edit_vital',
+            compact('patient', 'vital_sign', 'staff')
+        );
+
     }
 
     // バイタルサインを上書き更新

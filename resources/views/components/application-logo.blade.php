@@ -1,1 +1,3 @@
-<img src="{{ asset('favicon.png') }}" alt="Logo" {{ $attributes->merge(['class' => 'w-20 h-20 object-contain']) }}>
+<img src="{{ asset('favicon.png') }}"
+     alt="Logo"
+     {{ $attributes }}>

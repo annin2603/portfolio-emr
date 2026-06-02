@@ -3,15 +3,14 @@
     <x-slot name="header">
         <div class="space-y-4">
             <div class="mb-3">
-                <a href="{{ route('dashboard') }}"
-                class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
-                    ☚  <span class="rounded-lg border border-blue-600 px-3 py-1.5 ml-2">入院患者一覧へ戻る</span>
+                <a href="{{ route('dashboard') }}"class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <span class="rounded-lg border border-blue-600 px-3 py-1.5 ml-2">⬅️ 入院患者一覧へ戻る</span>
                 </a>
             </div>
 
             <div class="flex items-center justify-between">
                 <h2 class="font-semibold text-base text-gray-500 uppercase tracking-wider">
-                    患者詳細
+                    👤 患者詳細
                 </h2>
 
                 <div class="text-xs text-gray-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm whitespace-nowrap">
@@ -71,7 +70,7 @@
             <div class="bg-white overflow-hidden shadow-sm rounded-lg p-6 border-l-4 border-blue-500">
                 <!-- 患者の基本情報 -->
                 <h4 class="text-lg text-gray-900 font-bold mt-2 mb-6">📝 患者基本情報</h4>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm pt-2 pb-4 border-t border-b border-gray-100">
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-5 text-sm pt-2 pb-4 border-t border-b border-gray-100">
                     <div>
                         <p class="text-gray-400 text-xs font-medium">性別</p>
                         <p class="font-bold text-gray-800 mt-0.5 text-base">{{ $patient->gender }}</p>
@@ -80,6 +79,12 @@
                         <p class="text-gray-400 text-xs font-medium">生年月日</p>
                         <p class="font-bold text-gray-800 mt-0.5 text-base">
                             {{ \Carbon\Carbon::parse($patient->birthday)->format('Y年m月d日') }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-xs font-medium">年齢</p>
+                        <p class="font-bold text-gray-800 mt-0.5 text-base">
+                            {{ \Carbon\Carbon::parse($patient->birthday)->age }}歳
                         </p>
                     </div>
                     <div>
@@ -261,6 +266,48 @@
                     </div>
                 </form>
 
+                <!-- バイタル折れ線グラフ -->
+                <h4 class="text-lg font-bold text-gray-800 mb-4">📊 バイタルサイン推移グラフ</h4>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                    <!-- 体温グラフ -->
+                    <div class="bg-white shadow-sm rounded-lg p-6">
+                        <h4 class="text-sm font-bold text-gray-800 mb-4">
+                            体温
+                        </h4>
+                        <canvas id="temperatureChart" height="80"></canvas>
+                    </div>
+                    <!-- 血圧グラフ -->
+                    <div class="bg-white shadow-sm rounded-lg p-6 ">
+                        <h4 class="text-sm font-bold text-gray-800 mb-4">
+                             血圧
+                        </h4>
+                        <canvas id="bloodPressureChart" height="80"></canvas>
+                    </div>
+                    <!-- 脈拍グラフ -->
+                    <div class="bg-white shadow-sm rounded-lg p-6">
+                        <h4 class="text-sm font-bold text-gray-800 mb-4">
+                             脈拍
+                        </h4>
+                        <canvas id="pulseChart" height="80"></canvas>
+                    </div>
+                    <!-- SpO2グラフ -->
+                    <div class="bg-white shadow-sm rounded-lg p-6">
+                        <h4 class="text-sm font-bold text-gray-800 mb-4">
+                             SpO₂
+                        </h4>
+                        <canvas id="spo2Chart" height="80"></canvas>
+                    </div>
+                    <!-- 呼吸数グラフ -->
+                    <div class="bg-white shadow-sm rounded-lg p-6">
+                        <h4 class="text-sm font-bold text-gray-800 mb-4">
+                             呼吸数
+                        </h4>
+                        <canvas id="respiratoryChart" height="80"></canvas>
+                    </div>
+
+                </div>
+
+
                 <!-- バイタル履歴 -->
                 <div class="mt-8 pt-6 border-t border-gray-100">
                     <h5 class="text-md font-bold text-gray-700 mb-4">📋 過去のバイタルサイン</h5>
@@ -359,4 +406,197 @@
                 </div>
             </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // 体温
+        const ctx = document.getElementById('temperatureChart');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    @foreach($vital_history as $vital)
+                        '{{ $vital->measured_at->format("m/d H:i") }}',
+                    @endforeach
+                ],
+                datasets: [{
+                    label: '体温(℃)',
+                    data: [
+                        @foreach($vital_history as $vital)
+                            {{ $vital->body_temperature ?? 'null' }},
+                        @endforeach
+                    ],
+                    borderColor: '#f59e0b',
+                    backgroundColor: '#f59e0b',
+                    tension: 0,
+                    spanGaps: true,
+                    pointRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        min:35,
+                        max:40
+                    }
+                }
+            }
+        });
+
+        // 血圧
+        const bpCtx = document.getElementById('bloodPressureChart');
+
+        new Chart(bpCtx, {
+            type: 'line',
+            data: {
+                labels: [
+                    @foreach($vital_history as $vital)
+                        '{{ $vital->measured_at->format("m/d H:i") }}',
+                    @endforeach
+                ],
+                datasets: [
+                    {
+                        label: '収縮期血圧',
+                        data: [
+                            @foreach($vital_history as $vital)
+                                {{ $vital->blood_pressure_systolic ?? 'null' }},
+                            @endforeach
+                        ],
+                        borderColor: '#dc2626',
+                        backgroundColor: '#dc2626',
+                        tension: 0,
+                        spanGaps: true,
+                        pointRadius: 4,
+                    },
+                    {
+                        label: '拡張期血圧',
+                        data: [
+                            @foreach($vital_history as $vital)
+                                {{ $vital->blood_pressure_diastolic ?? 'null' }},
+                            @endforeach
+                        ],
+                        borderColor: '#2563eb',
+                        backgroundColor: '#2563eb',
+                        tension: 0,
+                        spanGaps: true,
+                        pointRadius: 4,
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: true,
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+
+        // 脈拍
+        const pulseCtx = document.getElementById('pulseChart');
+
+        new Chart(pulseCtx, {
+            type: 'line',
+            data: {
+                labels: [
+                    @foreach($vital_history as $vital)
+                        '{{ $vital->measured_at->format("m/d H:i") }}',
+                    @endforeach
+                ],
+                datasets: [{
+                    label: '脈拍',
+                    data: [
+                        @foreach($vital_history as $vital)
+                            {{ $vital->pulse_rate ?? 'null' }},
+                        @endforeach
+                    ],
+                    borderColor: '#16a34a',
+                    backgroundColor: '#16a34a',
+                    tension: 0,
+                    spanGaps: true,
+                    pointRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+
+            }
+        });
+
+        // SpO2
+        const spo2Ctx = document.getElementById('spo2Chart');
+
+        new Chart(spo2Ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    @foreach($vital_history as $vital)
+                        '{{ $vital->measured_at->format("m/d H:i") }}',
+                    @endforeach
+                ],
+                datasets: [{
+                    label: 'SpO₂',
+                    data: [
+                        @foreach($vital_history as $vital)
+                            {{ $vital->spo2 ?? 'null' }},
+                        @endforeach
+                    ],
+                    borderColor: '#06b6d4',
+                    backgroundColor: '#06b6d4',
+                    tension: 0,
+                    spanGaps: true,
+                    pointRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        min:60,
+                        max:100
+                    }
+                }
+            }
+        });
+
+        // 呼吸数
+        const respiratoryCtx = document.getElementById('respiratoryChart');
+
+        new Chart(respiratoryCtx, {
+            type: 'line',
+            data: {
+                labels: [
+                    @foreach($vital_history as $vital)
+                        '{{ $vital->measured_at->format("m/d H:i") }}',
+                    @endforeach
+                ],
+                datasets: [{
+                    label: '呼吸数',
+                    data: [
+                        @foreach($vital_history as $vital)
+                            {{ $vital->respiratory_rate ?? 'null' }},
+                        @endforeach
+                    ],
+                    borderColor: '#8b5cf6',
+                    backgroundColor: '#8b5cf6',
+                    tension: 0,
+                    spanGaps: true,
+                    pointRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+    </script>
+
 </x-app-layout>
