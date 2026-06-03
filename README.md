@@ -38,6 +38,74 @@
 - users
 - patients
 - vital_signs
+
+## ER図
+
+```mermaid
+erDiagram
+
+    PATIENTS ||--o{ VITAL_SIGNS : records
+
+    USERS {
+        bigint id PK
+        string name
+        string login_id
+        string password
+    }
+
+    PATIENTS {
+        bigint id PK
+        string patient_id
+        string name
+        string kana
+        string gender
+        date birthday
+        string blood_type
+        string room_number
+        string bed_number
+        string allergy
+        text memo
+    }
+
+    VITAL_SIGNS {
+        bigint id PK
+        bigint patient_id FK
+        decimal body_temperature
+        integer pulse_rate
+        integer blood_pressure_systolic
+        integer blood_pressure_diastolic
+        integer respiratory_rate
+        integer spo2
+        text vital_memo
+        datetime measured_at
+    }
+```
+## 画面構成
+
+- ログイン画面
+    - 患者一覧画面
+        - 患者詳細画面
+        - 患者情報編集
+        - バイタル記録
+        - バイタル推移グラフ
+
+## 画面イメージ
+
+### ログイン画面
+
+![ログイン画面](images/login.png)
+
+### 患者一覧画面
+
+![患者一覧画面](images/dashboard.png)
+
+### 患者詳細画面
+
+![患者詳細画面](images/patient-show.png)
+
+### バイタル推移グラフ
+
+![バイタルグラフ](images/vital-chart.png)
   
 ## 工夫した点
 ### バイタルサインの可視化
@@ -55,5 +123,3 @@
 - 異常値アラート機能
 - モバイル対応
 
-## ER図
-## 画面構成
