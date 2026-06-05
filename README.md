@@ -107,6 +107,10 @@ erDiagram
 
 ![バイタルグラフ](images/vital-chart.png)
 
+### バイタル履歴
+
+![バイタル履歴](images/vital-history.png)
+
 ## ログイン方法
 - ID: 9999
 - パスワード: password
