@@ -3,25 +3,25 @@
     <x-slot name="header">
         <div class="space-y-4">
             <div class="mb-3">
-                <a href="{{ route('dashboard') }}"class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                <a href="{{ route('dashboard') }}"class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 transition-colors">
                     <span class="rounded-lg border border-blue-600 px-3 py-1.5 ml-2">⬅️ 入院患者一覧へ戻る</span>
                 </a>
             </div>
 
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <h2 class="font-semibold text-base text-gray-500 uppercase tracking-wider">
                     👤 患者詳細
                 </h2>
 
-                <div class="text-xs text-gray-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm whitespace-nowrap">
+                <div class="text-xs text-gray-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm md:whitespace-nowrap self-start md:self-auto">
                     ログイン職員: <span class="font-bold text-blue-700">{{ $staff->name }}</span> さん
                     (職員番号: <span class="font-mono bg-white px-1 border rounded">{{ $staff->login_id }}</span>)
                 </div>
             </div>
-            <div class="flex items-end justify-between gap-4 pt-3 mt-4 border-t border-gray-100">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 pt-3 mt-4 border-t border-gray-100">
 
                 <!-- 左側 -->
-                <div class="flex items-end gap-6">
+                <div class="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-6">
                     <div>
                         <h3 class="text-3xl font-bold text-gray-900  mt-3 leading-tight">
                             {{ $patient->name }}
@@ -42,14 +42,14 @@
                 </div>
 
                 <!-- 右側 -->
-                <div class="flex items-center space-x-3 whitespace-nowrap">
-                    <a href="{{ route('patients.edit', $patient) }}" class="text-emerald-600 hover:text-emerald-900 bg-emerald-100 px-3 py-1 rounded-md transition-colors">
+                <div class="flex items-center gap-3 w-full lg:w-auto mt-2 lg:mt-0">
+                    <a href="{{ route('patients.edit', $patient) }}" class="flex-1 sm:flex-none text-center text-emerald-600 hover:text-emerald-900 bg-emerald-100 px-4 py-2 sm:py-1 rounded-md text-sm font-medium transition-colors shadow-sm">
                         編集
                     </a>
                     <form action="{{ route('patients.destroy', $patient) }}" method="POST" onsubmit="return confirm('本当に退院（削除）でよろしいですか？');" class="inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-yellow-600 hover:text-yellow-900 bg-yellow-100 px-3 py-1 rounded-md transition-colors">
+                        <button type="submit" class="w-full text-center text-yellow-600 hover:text-yellow-900 bg-yellow-100 px-4 py-2 sm:py-1 text-sm font-medium rounded-md transition-colors shadow-sm">
                             退院
                         </button>
                     </form>
