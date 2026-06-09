@@ -100,9 +100,19 @@ erDiagram
 
 ![患者一覧画面](images/dashboard.png)
 
+### 患者登録画面
+
+![患者登録画面](images/create.png)
+
+
 ### 患者詳細画面
 
 ![患者詳細画面](images/patient-show.png)
+
+### バイタル登録画面
+
+![バイタル登録画面](images/vital.png)
+
 
 ### バイタル推移グラフ
 
