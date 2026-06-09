@@ -56,4 +56,14 @@ Route::middleware(['auth'])->group (function() {
 
 });
 
+// ==============================================================================================
+
+Route::get('/debug', function () {
+    return [
+        'url' => url('/'),
+        'secure' => request()->secure(),
+        'scheme' => request()->getScheme(),
+    ];
+});
+
 require __DIR__.'/auth.php';
